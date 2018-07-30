@@ -30,7 +30,6 @@ class PrimeNumberState extends State<PrimeNumber> {
                           labelText: "Prime Number ah"
                       ),
                       autofocus: true,
-                      maxLength: 10,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       onSaved: (val) => inputVal = val,
@@ -56,10 +55,11 @@ class PrimeNumberState extends State<PrimeNumber> {
       print('Form is not valid! Please review and correct');
     } else {
       form.save();
-      if (primeValidator.isPrime(int.parse(inputVal))) {
+      var ret = primeValidator.isPrime(int.parse(inputVal));
+      if (ret == 0) {
         print ("PRIME");
       } else {
-        print ("NOT A PRIME");
+        print ("NOT A PRIME. Divisible by " + ret.toString());
       }
     }
   }
