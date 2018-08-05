@@ -75,6 +75,10 @@ class PrimeNumberState extends State<PrimeNumber> {
       print('Form is not valid! Please review and correct');
     } else {
       form.save();
+//      String formattedInput = "";
+      unnecessaryInputs().forEach((input) {
+        inputVal = inputVal.toString().trim().replaceAll(input, '');
+      });
       int inputNum = int.parse(inputVal);
 
       if (primeSet.contains(inputNum)) {
@@ -90,6 +94,10 @@ class PrimeNumberState extends State<PrimeNumber> {
         }
       }
     }
+  }
+
+  List unnecessaryInputs(){
+    return ["-", " ", ",", "."];
   }
 
   void addToPrimeList() {

@@ -30,7 +30,7 @@ class PrimeStorage {
       List<String> primeList = contents.split(",");
       return primeList;
     } catch (e) {
-      print ("Caught exception: " + e);
+      print ("Caught exception: " + e.toString());
       return new List<String>();
     }
   }
