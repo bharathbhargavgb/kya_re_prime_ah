@@ -53,7 +53,7 @@ class PrimeNumberState extends State<PrimeNumber> {
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       onSaved: (val) => inputVal = val,
-                      validator: (val) => val.isEmpty? "Value required": null,
+                      validator: (val) => isValidNumber(val),
                     ),
                     new Container(
                         padding: const EdgeInsets.only(left: 40.0, top: 20.0),
@@ -97,7 +97,19 @@ class PrimeNumberState extends State<PrimeNumber> {
   }
 
   List unnecessaryInputs(){
-    return ["-", " ", ",", "."];
+    return [","];
+  }
+
+  String isValidNumber(String value){
+    unnecessaryInputs().forEach((input) {
+      value = value.toString().trim().replaceAll(input, '');
+    });
+    var message;
+    if(value.isEmpty)
+      message = "Required";
+    if(int.tryParse(value)==null)
+      message = "Invalid";
+    return message;
   }
 
   void addToPrimeList() {
