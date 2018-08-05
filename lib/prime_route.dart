@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'prime_validator.dart';
+import 'prime_storage.dart';
+import 'dart:collection';
+
 
 class PrimeNumber extends StatefulWidget {
   createState() => PrimeNumberState();
@@ -9,7 +12,24 @@ class PrimeNumberState extends State<PrimeNumber> {
   
   final PrimeValidator primeValidator = new PrimeValidator();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  final PrimeStorage storage = new PrimeStorage();
+  Set primeSet = new HashSet<int>();
   var inputVal;
+
+  @override
+  void initState() {
+    super.initState();
+    storage.readPrimeList().then((List<String> primeStrings) {
+      setState(() {
+        if (primeStrings.isEmpty) {
+          print("File not found or is empty ");
+        } else {
+          print("File found");
+        }
+        primeStrings.forEach((element) => primeSet.add(int.parse(element)));
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +75,24 @@ class PrimeNumberState extends State<PrimeNumber> {
       print('Form is not valid! Please review and correct');
     } else {
       form.save();
-      var ret = primeValidator.isPrime(int.parse(inputVal));
-      if (ret == 0) {
-        print ("PRIME");
+      int inputNum = int.parse(inputVal);
+
+      if (primeSet.contains(inputNum)) {
+        print ("Thambi, oru thadava thaan. Oyaaama potukute iruka...");
       } else {
-        print ("NOT A PRIME. Divisible by " + ret.toString());
+        var divisor = primeValidator.isPrime(inputNum);
+        if (divisor == 0) {
+          print("PRIME");
+          primeSet.add(inputNum);
+          addToPrimeList();
+        } else {
+          print("NOT A PRIME. Divisible by " + divisor.toString());
+        }
       }
     }
+  }
+
+  void addToPrimeList() {
+    storage.updatePrimeList(primeSet);
   }
 }
